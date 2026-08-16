@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=MISUCO
+Exec=/root/misuco.sh
+Icon=applications-games
+Type=Application
+Terminal=false
+Categories=Utility;

@@ -1,0 +1,17 @@
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+country=CH
+
+network={
+    ssid="UPC4965005-24"
+    psk="r5nnYswQqfyx"
+    key_mgmt=WPA-PSK
+}
+
+network={
+    ssid="x"
+    psk="kevin1234"
+    key_mgmt=WPA-PSK
+}

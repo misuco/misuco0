@@ -1,0 +1,26 @@
+[Unit]
+Description=WLAN-Verbindung (wlan0) mit nl80211 und udhcpc
+After=network.target
+Before=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 1. Vor dem Start das WLAN-Modul entblocken
+ExecStartPre=/bin/sh -c 'if command -v rfkill >/dev/null 2>&1; then rfkill unblock wifi; fi'
+# Kurz warten, damit die Hardware bereit ist
+ExecStartPre=/bin/sleep 1
+
+# 2. wpa_supplicant im VORDERGRUND starten (ohne -B), damit systemd den Prozess überwachen kann
+ExecStart=/usr/sbin/wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf
+
+# 3. Sobald verbunden, den DHCP-Client im Hintergrund anstossen
+ExecStartPost=/bin/sh -c 'if command -v udhcpc >/dev/null 2>&1; then udhcpc -b -i wlan0; fi'
+
+# Falls der Dienst abstürzt, nach 5 Sekunden neu starten
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
